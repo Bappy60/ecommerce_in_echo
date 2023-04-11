@@ -6,6 +6,7 @@ import (
 	"github.com/Bappy60/ecommerce_in_echo/pkg/config"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var DB *gorm.DB
@@ -32,9 +33,10 @@ func Initialize() *gorm.DB {
 		&models.ProductCategory{},
 		&models.Product{},
 		&models.Address{},
-		&models.SelectedProduct{},
+		&models.Cart{},
 		&models.Order{},
-		&models.Payment{},
+		&models.OrderItem{},
+		&models.CartItem{},
 	)
 	return db
 }

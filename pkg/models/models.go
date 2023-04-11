@@ -6,17 +6,12 @@ import (
 
 type User struct {
     ID            uint64            `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-    Name          string            `json:"name" validate:"required,min=2,max=30"`
-    Password      string            `json:"password"   validate:"required,min=6"`
-    Email         string            `json:"email"      validate:"email,required"`
-    Phone         string            `json:"phone"      validate:"required"`
-    Token         string            `json:"token"`
-    RefreshToken  string            `json:"refresh_token"`
-    CreatedAt     time.Time         `json:"created_at"`
-    UpdatedAt     time.Time         `json:"updated_at"`
+    Name          string            `json:"name"`
+    Password      string            `json:"password"`
+    Email         string            `json:"email"`
     AddressID     uint64            `json:"address_id"`
     Address       Address           `json:"address"`
-    UserCart      []SelectedProduct `json:"user_cart"`
+    Carts         []Cart            `json:"carts"`
     Orders        []Order           `json:"orders"`
 }
 
@@ -36,33 +31,53 @@ type Product struct {
 }
 
 
-type SelectedProduct struct {
-    ID           uint64   `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-    ProductID    uint64   `json:"product_id"`
-    Product      Product  `json:"product"`
-    Price        float64  `json:"price"`
-    OrderID      uint64   `json:"order_id"`
+type Cart struct {
+    ID            uint64      `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+    UserID        uint64      `gorm:"not null" json:"user_id"`
+    CreatedAt     time.Time   `json:"created_at"`
+    UpdatedAt     time.Time   `json:"updated_at"`
+    CartItems     []CartItem  `json:"cart_items"`
+    User          User        `gorm:"foreignkey:UserID"`
 }
+
+type CartItem struct {
+    ID            uint64      `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+    CartID        uint64      `gorm:"not null" json:"cart_id"`
+    ProductID     uint64      `gorm:"not null" json:"product_id"`
+    Quantity      uint32      `gorm:"not null" json:"quantity"`
+    Price         float64     `gorm:"not null" json:"price"`
+    Product       Product     `json:"product"`
+}
+
+type Order struct {
+    ID            uint64    `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+    UserID        uint64    `gorm:"not null" json:"user_id"`
+    AddressID     uint64    `gorm:"not null" json:"address_id"`
+    TotalPrice    float64   `gorm:"not null" json:"total_price"`
+    OrderStatus   string    `gorm:"not null" json:"order_status"`
+    PaymentStatus bool    `gorm:"not null" json:"payment_status"`
+    OrderedAt    time.Time          `json:"ordered_at"`
+    Address       Address   `json:"address"`
+    OrderItems    []OrderItem `json:"order_items"`
+}
+
+
+
+type OrderItem struct {
+    ID        uint64  `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+    OrderID   uint64  `gorm:"not null" json:"order_id"`
+    ProductID uint64  `gorm:"not null" json:"product_id"`
+    Quantity  uint32  `gorm:"not null" json:"quantity"`
+    Price     float64 `gorm:"not null" json:"price"`
+    Product   Product `json:"product"`
+}
+
 
 type Address struct {
     ID         uint64 `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
     Country    string `json:"country"`
     City       string `json:"city"`
     PostalCode string `json:"postal_code"`
-    Users      []User `json:"users"`
 }
 
-type Order struct {
-    ID           uint64             `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-    UserID       uint64             `json:"user_id"`
-    User         User               `json:"user" gorm:"foreignkey:UserID"`
-    OrderedAt    time.Time          `json:"ordered_at"`
-    TotalPrice   float64            `json:"total_price"`
-    Payment      Payment            `json:"payment"`
-    SelectedProducts []SelectedProduct `json:"selected_products"`
-}
 
-type Payment struct {
-    Digital bool   `json:"digital"`
-    COD     bool   `json:"cod"`
-}

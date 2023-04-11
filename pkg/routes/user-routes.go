@@ -1,13 +1,16 @@
 package routes
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
+	"github.com/labstack/echo/v4"
+)
 
-func UserRoutes(e *echo.Echo) {
-	//userGroup := e.Group("/users")
-	//userGroup.POST("/signup",)
-	// userGroup.POST("/login",)
-	// e.POST("admin/addproduct",)
+func UserRoutes(e *echo.Echo, userController domain.IUserController ) {
+	userGroup := e.Group("/users")
+	userGroup.POST("/signup",userController.SignUp)
+	userGroup.POST("/login",userController.Login)
+	//e.POST("admin/addproduct",)
 
-	// userGroup.GET("users/productview",)
-	// userGroup.GET("users/search",)
+	userGroup.GET("users/viewproduct",userController.ViewProduct)
+	userGroup.GET("users/search",userController.SearchProduct)
 }
