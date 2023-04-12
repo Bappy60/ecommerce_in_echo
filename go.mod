@@ -23,6 +23,7 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/labstack/gommon v0.4.0 // indirect

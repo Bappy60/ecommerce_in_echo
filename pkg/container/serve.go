@@ -11,15 +11,16 @@ import (
 )
 
 func Serve() {
+	e := echo.New()
 	config.SetConfig()
 	var db = connection.Initialize()
 	userController := controllers.SetDbInstance(db)
 	log.Println("Database Connected...")
-	e := echo.New()
 	routes.UserRoutes(e, userController)
 	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
 
-	// userRepo := repositories.UserDBInstance(db)
+}
+// userRepo := repositories.UserDBInstance(db)
 	// userService := services.UserServiceInstance(userRepo)
 	// userController := controllers.UserControllerInstance(userService)
 
@@ -37,4 +38,4 @@ func Serve() {
 	// http.Handle("/", r)
 	// log.Println("Server Started...")
 	// log.Fatal(http.ListenAndServe("localhost:9011", r))
-}
+

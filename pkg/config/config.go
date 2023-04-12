@@ -9,11 +9,12 @@ import (
 var LocalConfig *Config
 
 type Config struct {
-	DBUser string `mapstructure:"DBUSER"`
-	DBPass string `mapstructure:"DBPASS"`
-	DBIP   string `mapstructure:"DBIP"`
-	DbName string `mapstructure:"DBNAME"`
-	Port   string `mapstructure:"PORT"`
+	DBUser     string `mapstructure:"DBUSER"`
+	DBPass     string `mapstructure:"DBPASS"`
+	DBIP       string `mapstructure:"DBIP"`
+	DbName     string `mapstructure:"DBNAME"`
+	Port       string `mapstructure:"PORT"`
+	SECRET_KEY string `mapstructure:"SECRET_KEY"`
 }
 
 func InitConfig() *Config {

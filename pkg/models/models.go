@@ -8,11 +8,12 @@ type User struct {
     ID            uint64            `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
     Name          string            `json:"name"`
     Password      string            `json:"password"`
-    Email         string            `json:"email"`
+    Email         string            `json:"email" gorm:"unique; not null"`
     AddressID     uint64            `json:"address_id"`
     Address       Address           `json:"address"`
     Carts         []Cart            `json:"carts"`
     Orders        []Order           `json:"orders"`
+    IsAdmin       bool              `json:"is_admin" gorm:"default:false"`
 }
 
 type ProductCategory struct {

@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	
 	"log"
 	"net/http"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
+	"github.com/Bappy60/ecommerce_in_echo/pkg/tokens"
+
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -69,16 +72,26 @@ func (userController *UserController) Login(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if err := userController.db.Where("email = ?", user.Email).First(&foundUser).Error; err != nil {
+
+	if err := userController.db.Where("email = ?", user.Email).First(&foundUser).Error; err !=nil{
 		return c.JSON(http.StatusBadRequest, "email or password incorrect")
 	}
-	PasswordIsValid, msg := VerifyPassword(user.Password, foundUser.Password)
-	if !PasswordIsValid {
+
+	IsValidPassword, msg := VerifyPassword(user.Password, foundUser.Password)
+	if !IsValidPassword {
 		return c.JSON(http.StatusInternalServerError, msg)
 	}
-	//TODO: Token generation 
 	
-	return c.JSON(http.StatusFound,"return the token")
+	token,err := tokens.TokenGenerator(foundUser.Email)
+	if err != nil {
+		log.Println("Error Creating JWT token", err)
+		return c.String(http.StatusInternalServerError, "something went wrong")
+	}
+	
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": "You were logged in!",
+		"token": token,
+	})
 
 }
 
