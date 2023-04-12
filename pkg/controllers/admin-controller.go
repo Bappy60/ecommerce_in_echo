@@ -32,7 +32,10 @@ func (adminController *AdminController) AddProduct(c echo.Context) error {
 		Price:    reqproduct.Price,
 		Category: reqproduct.Category,
 	}
-	
+	if err := adminController.db.Where("name = ?", product.Name).First(&models.Product{}).Error; err == nil {
+		return c.JSON(http.StatusBadRequest, "product already exists")
+	}
+
 	if err := adminController.db.Create(&product).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, "Not Created")
 	}
