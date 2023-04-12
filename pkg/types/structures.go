@@ -41,12 +41,6 @@ type CreateProductStruct struct {
 	Category models.ProductCategory `json:"category"`
 }
 func (product CreateProductStruct) Validate() error {
-
-    // categoryRules := []*validation.FieldRules{
-    //     validation.Field(&product.Category.CategoryName, validation.Required),
-    //     validation.Field(&product.Category.Description, validation.Required),
-    // }
-
     return validation.ValidateStruct(&product,
         validation.Field(&product.Name, validation.Required),
         validation.Field(&product.Price, validation.Required),
@@ -54,8 +48,13 @@ func (product CreateProductStruct) Validate() error {
     )
 }
 
-// func categoryRulesValidator(rules []*validation.FieldRules) validation.RuleFunc {
-// 	return func(value interface{}) error {
-// 		return validation.ValidateStruct(nil, rules...)
-// 	}
-// }
+type AddToCartStruct struct {
+	ProductID int     `json:"product_id"`
+	Quantity  int     `json:"quantity"`
+}
+func (atc AddToCartStruct) Validate() error {
+    return validation.ValidateStruct(&atc,
+        validation.Field(&atc.ProductID, validation.Required),
+        validation.Field(&atc.Quantity, validation.Required),
+    )
+}

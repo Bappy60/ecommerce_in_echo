@@ -10,13 +10,14 @@ import (
 func JWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		authHeadertoken := c.Request().Header.Get("Authorization")
+		authHeadertoken := c.Request().Header.Get("token")
+
 		if authHeadertoken == "" {
 			return c.JSON(http.StatusUnauthorized, "token is needed Unauthorized:(")
 		}
 		claims, err := tokens.ValidateToken(authHeadertoken)
 		if err != "" {
-			return c.JSON(http.StatusUnauthorized, "Unauthorized")
+			return c.JSON(http.StatusUnauthorized, err)
 		}
 		c.Set("email",claims.Email)
 		c.Set("userId",claims.UserId)

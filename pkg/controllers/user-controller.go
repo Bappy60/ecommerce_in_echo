@@ -88,24 +88,23 @@ func (userController *UserController) Login(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "something went wrong")
 	}
 
-	cartID, err := userController.CreateCart(foundUser.ID)
-	if err != nil {
+	if err := userController.CreateCart(foundUser.ID); err != nil {
 		return c.JSON(http.StatusInternalServerError, "could not create/found the cart")
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "You were logged in!",
 		"token":   token,
-		"cart_id": cartID,
+		// "cart_id": cartID,
 	})
 
 }
 
-func (userController *UserController) CreateCart(userId uint64) (uint64, error) {
+func (userController *UserController) CreateCart(userId uint64) error {
 
 	cart := models.Cart{}
 	if err := userController.db.Where("user_id = ?", userId).First(&cart).Error; err == nil {
-		return cart.ID, nil
+		return nil
 	} else {
 		newCart := models.Cart{
 			UserID:    userId,
@@ -114,9 +113,9 @@ func (userController *UserController) CreateCart(userId uint64) (uint64, error) 
 		}
 
 		if err := userController.db.Create(&newCart).Error; err != nil {
-			return 0, err
+			return err
 		}
-		return newCart.ID, nil
+		return nil
 	}
 }
 
