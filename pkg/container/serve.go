@@ -14,9 +14,11 @@ func Serve() {
 	e := echo.New()
 	config.SetConfig()
 	var db = connection.Initialize()
-	userController := controllers.SetDbInstance(db)
+	userController := controllers.UserControllerInstance(db)
+	adminController := controllers.AdminControllerInstance(db)
 	log.Println("Database Connected...")
 	routes.UserRoutes(e, userController)
+	routes.AdminRoutes(e,adminController)
 	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
 
 }

@@ -1,7 +1,9 @@
 package models
 
 import (
-    "time"
+	"time"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type User struct {
@@ -82,3 +84,9 @@ type Address struct {
 }
 
 
+func (pc ProductCategory) Validate() error {
+    return validation.ValidateStruct(&pc,
+        validation.Field(&pc.CategoryName, validation.Required),
+        validation.Field(&pc.Description, validation.Required),
+    )
+}

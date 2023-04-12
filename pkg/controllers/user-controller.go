@@ -28,7 +28,7 @@ type UserController struct {
 	db *gorm.DB
 }
 
-func SetDbInstance(db *gorm.DB) *UserController {
+func UserControllerInstance(db *gorm.DB) *UserController {
 	return &UserController{
 		db: db,
 	}
@@ -36,7 +36,7 @@ func SetDbInstance(db *gorm.DB) *UserController {
 
 // SignUp implements domain.IUserController
 func (userController *UserController) SignUp(c echo.Context) error {
-	user := types.RequestStruct{}
+	user := types.SignReqStruct{}
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -63,7 +63,7 @@ func (userController *UserController) SignUp(c echo.Context) error {
 
 // Login implements domain.IUserController
 func (userController *UserController) Login(c echo.Context) error {
-	user := types.LogReqStruct{}
+	user := types.LoginReqStruct{}
 	foundUser := models.User{}
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
