@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/tokens"
@@ -81,17 +82,42 @@ func (userController *UserController) Login(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, msg)
 	}
 
-	token, err := tokens.TokenGenerator(foundUser.Email)
+	token, err := tokens.TokenGenerator(foundUser.Email, foundUser.ID)
 	if err != nil {
 		log.Println("Error Creating JWT token", err)
 		return c.JSON(http.StatusInternalServerError, "something went wrong")
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{
+	cartID, err := userController.CreateCart(foundUser.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "could not create/found the cart")
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "You were logged in!",
 		"token":   token,
+		"cart_id": cartID,
 	})
 
+}
+
+func (userController *UserController) CreateCart(userId uint64) (uint64, error) {
+
+	cart := models.Cart{}
+	if err := userController.db.Where("user_id = ?", userId).First(&cart).Error; err == nil {
+		return cart.ID, nil
+	} else {
+		newCart := models.Cart{
+			UserID:    userId,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		}
+
+		if err := userController.db.Create(&newCart).Error; err != nil {
+			return 0, err
+		}
+		return newCart.ID, nil
+	}
 }
 
 func HashPassword(password string) string {

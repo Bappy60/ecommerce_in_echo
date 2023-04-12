@@ -17,10 +17,13 @@ func Serve() {
 	userController := controllers.UserControllerInstance(db)
 	adminController := controllers.AdminControllerInstance(db)
 	generalController := controllers.GeneralControllerInstance(db)
+	cartController := controllers.CartControllerInstance(db)
+
 	log.Println("Database Connected...")
 	routes.UserRoutes(e, userController)
 	routes.AdminRoutes(e,adminController)
 	routes.GeneralRoutes(e,generalController)
+	routes.CartRoutes(e,cartController)
 	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
 
 }

@@ -11,6 +11,7 @@ type SignReqStruct struct {
 	Password string         `json:"password"`
 	Email    string         `json:"email"`
 	Address  models.Address `json:"address"`
+	IsAdmin  bool			`json:"is_admin"`
 }
 
 func (user SignReqStruct) Validate() error {

@@ -9,13 +9,15 @@ import (
 
 type SignedDetails struct {
 	Email string
+	UserId uint64
 	jwt.StandardClaims
 }
 
 
-func TokenGenerator(email string) (signedtoken string, err error) {
+func TokenGenerator(email string,userID uint64) (signedtoken string, err error) {
 	claims := &SignedDetails{
 		Email: email,
+		UserId : userID,
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Local().Unix(),
 			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(24)).Unix(),
@@ -27,6 +29,7 @@ func TokenGenerator(email string) (signedtoken string, err error) {
 	}
 	return token, err
 }
+
 func ValidateToken(signedtoken string) (claims *SignedDetails, msg string) {
 	token, err := jwt.ParseWithClaims(signedtoken, &SignedDetails{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.LocalConfig.SECRET_KEY), nil

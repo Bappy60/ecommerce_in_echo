@@ -19,6 +19,7 @@ func JWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, "Unauthorized")
 		}
 		c.Set("email",claims.Email)
+		c.Set("userId",claims.UserId)
 		return next(c)
 	}
 }
