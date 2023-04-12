@@ -9,6 +9,6 @@ func AdminRoutes(e *echo.Echo, adminController domain.IAdminController) {
 	AdminGroup := e.Group("/admin")
 
 	AdminGroup.POST("/addproduct",adminController.AddProduct)
-	AdminGroup.DELETE("/deleteproduct",adminController.DeleteProduct)
+	AdminGroup.DELETE("/deleteproduct/:id",adminController.DeleteProduct)
 
 }

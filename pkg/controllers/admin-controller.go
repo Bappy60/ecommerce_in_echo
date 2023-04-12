@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
@@ -44,5 +45,17 @@ func (adminController *AdminController) AddProduct(c echo.Context) error {
 }
 
 func (adminController *AdminController) DeleteProduct(c echo.Context) error {
-	panic("unimplemented")
+	id, err := strconv.ParseUint(c.Param("id"), 0, 0)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Invalid id")
+	}
+	product := models.Product{}
+	product.ID = id
+	if err := adminController.db.Where("id = ?", product.ID).First(&models.Product{}).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, "Invalid Id")
+	}
+	if err := adminController.db.Unscoped().Where("id =?", product.ID).Delete(product).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, "Something went wrong in server side")
+	}
+	return c.JSON(http.StatusNoContent, "Delete Successfull")
 }
