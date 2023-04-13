@@ -13,11 +13,11 @@ func JWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		authHeadertoken := c.Request().Header.Get("token")
 
 		if authHeadertoken == "" {
-			return c.JSON(http.StatusUnauthorized, "token is needed Unauthorized:(")
+			return c.JSON(http.StatusUnauthorized, " Unauthorized :(")
 		}
 		claims, err := tokens.ValidateToken(authHeadertoken)
 		if err != "" {
-			return c.JSON(http.StatusUnauthorized, err)
+			return c.JSON(http.StatusUnauthorized,  " Unauthorized :( Try to login again")
 		}
 		c.Set("email",claims.Email)
 		c.Set("userId",claims.UserId)

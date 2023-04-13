@@ -29,7 +29,7 @@ type Product struct {
 	Name       string          `json:"name"`
 	Category   ProductCategory `json:"category" gorm:"foreignkey:CategoryID"`
 	CategoryID uint64          `json:"category_id"`
-	Price      uint64          `json:"price"`
+	Price      float64          `json:"price"`
 }
 
 type Cart struct {

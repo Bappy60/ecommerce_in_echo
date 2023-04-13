@@ -95,7 +95,6 @@ func (userController *UserController) Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "You were logged in!",
 		"token":   token,
-		// "cart_id": cartID,
 	})
 
 }

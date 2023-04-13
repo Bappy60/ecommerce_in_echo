@@ -11,7 +11,7 @@ type SignReqStruct struct {
 	Password string         `json:"password"`
 	Email    string         `json:"email"`
 	Address  models.Address `json:"address"`
-	IsAdmin  bool			`json:"is_admin"`
+	IsAdmin  bool           `json:"is_admin"`
 }
 
 func (user SignReqStruct) Validate() error {
@@ -37,24 +37,34 @@ func (user LoginReqStruct) Validate() error {
 
 type CreateProductStruct struct {
 	Name     string                 `json:"name"`
-	Price    uint64                 `json:"price"`
+	Price    float64                `json:"price"`
 	Category models.ProductCategory `json:"category"`
 }
+
 func (product CreateProductStruct) Validate() error {
-    return validation.ValidateStruct(&product,
-        validation.Field(&product.Name, validation.Required),
-        validation.Field(&product.Price, validation.Required),
-        validation.Field(&product.Category),
-    )
+	return validation.ValidateStruct(&product,
+		validation.Field(&product.Name, validation.Required),
+		validation.Field(&product.Price, validation.Required),
+		validation.Field(&product.Category),
+	)
 }
 
 type AddToCartStruct struct {
-	ProductID int     `json:"product_id"`
-	Quantity  int     `json:"quantity"`
+	ProductID int    `json:"product_id"`
+	Quantity  uint64 `json:"quantity"`
 }
+
 func (atc AddToCartStruct) Validate() error {
-    return validation.ValidateStruct(&atc,
-        validation.Field(&atc.ProductID, validation.Required),
-        validation.Field(&atc.Quantity, validation.Required),
-    )
+	return validation.ValidateStruct(&atc,
+		validation.Field(&atc.ProductID, validation.Required),
+		validation.Field(&atc.Quantity, validation.Required),
+	)
+}
+
+type ShowCartStruct struct {
+	CartItemID      uint64  `json:"cart_item_id"`
+	ProductName     string  `json:"product_name"`
+	ProductCategory string  `json:"product_category"`
+	ProductQuantity uint64  `json:"product_quantity"`
+	Amount          float64 `json:"amount"`
 }
