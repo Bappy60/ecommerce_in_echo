@@ -1,28 +1,36 @@
 package services
 
-// import (
-// 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
-// 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
-// )
-// type userService struct {
-// 	repo domain.IUserRepo
-// }
+import (
+	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
+	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
+)
 
-// func UserServiceInstance(userRepo domain.IUserRepo) domain.IUserService{
-// 	return &userService{
-// 		repo: userRepo,
-// 	}
-// }
-// func (service *userService) SignUp(user *types.RequestStruct) {
+type userService struct {
+	repo domain.IUserRepo
+}
 
+func UserServiceInstance(userRepo domain.IUserRepo) domain.IUserService {
+	return &userService{
+		repo: userRepo,
+	}
+}
 
-// }
-// func (service *userService) Login() {
+// SignUp implements domain.IUserService
+func (userService *userService) SignUp(reqUser *types.SignReqStruct) error {
 
-// }
-// func (service *userService) ViewProduct() {
+	err := userService.repo.SignUp(reqUser)
+	if  err != nil {
+		return err
+	}
+	return nil
+}
 
-// }
-// func (service *userService) SearchProduct() {
+// Login implements domain.IUserService
+func (userService *userService) Login(reqUser *types.LoginReqStruct) (string, error) {
 
-// }
+	token, err := userService.repo.Login(reqUser)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+}

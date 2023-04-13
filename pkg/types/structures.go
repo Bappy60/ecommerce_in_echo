@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
@@ -66,4 +68,18 @@ type ShowCartStruct struct {
 	ProductCategory string  `json:"product_category"`
 	ProductQuantity uint64  `json:"product_quantity"`
 	Amount          float64 `json:"amount"`
+}
+
+
+type CustomError struct {
+    StatusCode int
+    Message    string
+    Err        error
+}
+
+func (e *CustomError) Error() string {
+    if e.Err != nil {
+        return fmt.Sprintf("%s: %v", e.Message, e.Err)
+    }
+    return e.Message
 }
