@@ -16,13 +16,14 @@ func Serve() {
 	e := echo.New()
 	config.SetConfig()
 	var db = connection.Initialize()
+	
 	userRepo := repositories.UserDBInstance(db)
 	userService := services.UserServiceInstance(userRepo)
 	userController := controllers.UserControllerInstance(userService)
 
-	// cartRepo := repositories.CartDBInstance(db)
-	// cartService := services.CartServiceInstance(cartRepo)
-	// cartController := controllers.CartControllerInstance(cartService)
+	cartRepo := repositories.CartDBInstance(db)
+	cartService := services.CartServiceInstance(cartRepo)
+	cartController := controllers.CartControllerInstance(cartService)
 
 	// generalRepo := repositories.GeneralDBInstance(db)
 	// generalService := services.GeneralServiceInstance(generalRepo)
@@ -32,17 +33,15 @@ func Serve() {
 	// adminService := services.AdminServiceInstance(adminRepo)
 	// adminController := controllers.AdminControllerInstance(adminService)
 
-	adminController := controllers.AdminControllerInstance(db)
-	generalController := controllers.GeneralControllerInstance(db)
-	cartController := controllers.CartControllerInstance(db)
+	// adminController := controllers.AdminControllerInstance(db)
+	// generalController := controllers.GeneralControllerInstance(db)
+	// cartController := controllers.CartControllerInstance(db)
 
-	log.Println("Database Connected...")
-	routes.UserRoutes(e, userController)
-	routes.AdminRoutes(e,adminController)
-	routes.GeneralRoutes(e,generalController)
-	routes.CartRoutes(e,cartController)
+	 log.Println("Database Connected...")
+	 routes.UserRoutes(e, userController)
+	 routes.CartRoutes(e,cartController)
+	 // routes.AdminRoutes(e,adminController)
+	 // routes.GeneralRoutes(e,generalController)
 	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
 
 }
-
-

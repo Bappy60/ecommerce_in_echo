@@ -28,6 +28,7 @@ func GetDB() *gorm.DB {
 func Initialize() *gorm.DB {
 	Connect()
 	db := GetDB()
+	// db.DropTable(&models.CartItem{})
 	db.AutoMigrate(
 		&models.User{}, 
 		&models.ProductCategory{},
