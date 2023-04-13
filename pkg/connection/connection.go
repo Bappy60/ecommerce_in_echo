@@ -28,6 +28,19 @@ func GetDB() *gorm.DB {
 func Initialize() *gorm.DB {
 	Connect()
 	db := GetDB()
+
+	// db.DropTableIfExists(
+	// 	&models.User{}, 
+	// 	&models.ProductCategory{},
+	// 	&models.Product{},
+	// 	&models.Address{},
+	// 	&models.Cart{},
+	// 	&models.Order{},
+	// 	&models.OrderItem{},
+	// 	&models.CartItem{},
+	// 	// &models.Role{},
+	// )
+	
 	db.AutoMigrate(
 		&models.User{}, 
 		&models.ProductCategory{},

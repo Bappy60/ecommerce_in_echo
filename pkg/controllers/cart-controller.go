@@ -28,7 +28,7 @@ func (cartController *CartController) AddToCart(c echo.Context) error {
 	//TODO: validate the productId and cartId
 
 	userid := c.Get("userId").(uint64)
-	cart, err := cartController.getCartIDByUserID(userid)
+	cart, err := cartController.getCartByUserID(userid)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -65,7 +65,7 @@ func (cartController *CartController) AddToCart(c echo.Context) error {
 
 func (cartController *CartController) ShowCart(c echo.Context) error {
 	userid := c.Get("userId").(uint64)
-	cart, err := cartController.getCartIDByUserID(userid)
+	cart, err := cartController.getCartByUserID(userid)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -102,7 +102,7 @@ func (cartController *CartController) RemoveFromCart(c echo.Context) error {
 
 	// Check that the logged in user owns the cart that the item belongs to
 	userid := c.Get("userId").(uint64)
-	cart, err := cartController.getCartIDByUserID(userid)
+	cart, err := cartController.getCartByUserID(userid)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -118,7 +118,7 @@ func (cartController *CartController) RemoveFromCart(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cart item removed successfully"})
 }
 
-func (cartController *CartController) getCartIDByUserID(userId uint64) (*models.Cart, error) {
+func (cartController *CartController) getCartByUserID(userId uint64) (*models.Cart, error) {
 	cart := &models.Cart{}
 	query := cartController.db.Model(&models.Cart{}).Preload("CartItems")
 	if err := query.Where("user_id = ?", userId).First(&cart).Error; err != nil {

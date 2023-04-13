@@ -15,8 +15,9 @@ type User struct {
 	Address   Address `json:"address"`
 	Carts     []Cart  `json:"carts"`
 	Orders    []Order `json:"orders"`
-	IsAdmin   bool    `json:"is_admin" gorm:"default:false"`
+	HasRole   string  `json:"roles" gorm:"default:'user'"`
 }
+
 
 type ProductCategory struct {
 	ID           uint64 `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
@@ -29,7 +30,7 @@ type Product struct {
 	Name       string          `json:"name"`
 	Category   ProductCategory `json:"category" gorm:"foreignkey:CategoryID"`
 	CategoryID uint64          `json:"category_id"`
-	Price      float64          `json:"price"`
+	Price      float64         `json:"price"`
 }
 
 type Cart struct {
@@ -37,7 +38,7 @@ type Cart struct {
 	UserID    uint64     `gorm:"not null" json:"user_id"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
-	CartItems []CartItem `json:"cart_items"`
+	CartItems []CartItem `json:"cart_items" gorm:"foreignkey:CartID"`
 	User      User       `gorm:"foreignkey:UserID"`
 }
 
@@ -58,7 +59,7 @@ type Order struct {
 	OrderStatus   string      `gorm:"not null" json:"order_status"`
 	PaymentStatus bool        `gorm:"not null" json:"payment_status"`
 	OrderedAt     time.Time   `json:"ordered_at"`
-	Address       Address     `json:"address"`
+	Address       Address     `gorm:"foreignkey:AddressID" json:"address"`
 	OrderItems    []OrderItem `json:"order_items"`
 }
 

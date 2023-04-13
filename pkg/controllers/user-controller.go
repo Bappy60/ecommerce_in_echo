@@ -82,7 +82,7 @@ func (userController *UserController) Login(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, msg)
 	}
 
-	token, err := tokens.TokenGenerator(foundUser.Email, foundUser.ID)
+	token, err := tokens.TokenGenerator(foundUser.Email, foundUser.ID,foundUser.HasRole)
 	if err != nil {
 		log.Println("Error Creating JWT token", err)
 		return c.JSON(http.StatusInternalServerError, "something went wrong")

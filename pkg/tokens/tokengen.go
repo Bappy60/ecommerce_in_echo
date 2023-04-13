@@ -10,14 +10,16 @@ import (
 type SignedDetails struct {
 	Email string
 	UserId uint64
+	Role string
 	jwt.StandardClaims
 }
 
 
-func TokenGenerator(email string,userID uint64) (signedtoken string, err error) {
+func TokenGenerator(email string,userID uint64,role string) (signedtoken string, err error) {
 	claims := &SignedDetails{
 		Email: email,
 		UserId : userID,
+		Role:role,
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Local().Unix(),
 			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(24)).Unix(),
