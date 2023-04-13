@@ -47,7 +47,7 @@ func (userController *UserController) Login(c echo.Context) error {
 	}
 	token, err := userController.service.Login(&user)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "You were logged in!",
