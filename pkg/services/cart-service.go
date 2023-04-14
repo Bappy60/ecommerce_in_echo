@@ -1,7 +1,6 @@
 package services
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
@@ -32,8 +31,7 @@ func (service *CartService) RemoveFromCart(cartItemId string, userId uint64) err
 	parsedcartItemId, err := strconv.ParseUint(cartItemId, 10, 64)
 	if err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusBadRequest,
-			Message:    "Invalid Cart item Id",
+			Message: "Invalid Cart item Id",
 		}
 	}
 	err2 := service.repo.RemoveFromCart(parsedcartItemId, userId)

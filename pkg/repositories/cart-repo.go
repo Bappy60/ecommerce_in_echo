@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"net/http"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
@@ -25,8 +24,7 @@ func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCartStruct)
 	cart, err := repo.getCartByUserID(userid)
 	if err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusNotFound,
-			Message:    err.Error(),
+			Message: err.Error(),
 		}
 	}
 
@@ -37,8 +35,8 @@ func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCartStruct)
 		cartItem.TotalItemPrice = float64(cartItem.Product.Price) * float64(cartItem.Quantity)
 		if err := repo.db.Save(&cartItem).Error; err != nil {
 			return &types.CustomError{
-				StatusCode: http.StatusInternalServerError,
-				Message:    "could not update cart item",
+				Message: "could not update cart item",
+				Err: err,
 			}
 		}
 		return nil
@@ -53,16 +51,16 @@ func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCartStruct)
 			}
 			if err := repo.db.Create(&newCartItem).Error; err != nil {
 				return &types.CustomError{
-					StatusCode: http.StatusInternalServerError,
-					Message:    "could not add product to cart",
+					Message: "could not add product to cart",
+					Err: err,
 				}
 			}
 			return nil
 		}
 		// TODO:  statuscode conflict
 		return &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "Invalid ProductId",
+			Message: "Invalid ProductId",
+			Err: err,
 		}
 	}
 }
@@ -72,27 +70,23 @@ func (repo *CartRepo) RemoveFromCart(cartItemId uint64, userid uint64) error {
 	cartItem := models.CartItem{}
 	if err := repo.db.First(&cartItem, cartItemId).Error; err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "Cart item not found",
+			Message: "Cart item not found",
 		}
 	}
 	cart, err := repo.getCartByUserID(userid)
 	if err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
+			Message: err.Error(),
 		}
 	}
 	if cartItem.CartID != cart.ID {
 		return &types.CustomError{
-			StatusCode: http.StatusForbidden,
-			Message:    "Cart item does not belong to the logged in user",
+			Message: "Cart item does not belong to the logged in user",
 		}
 	}
 	if err := repo.db.Delete(&cartItem).Error; err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusForbidden,
-			Message:    "Could not remove cart item",
+			Message: "Could not remove cart item",
 		}
 	}
 	return nil
@@ -103,15 +97,13 @@ func (repo *CartRepo) ShowCart(userId uint64) ([]types.ShowCartStruct, error) {
 	cart, err := repo.getCartByUserID(userId)
 	if err != nil {
 		return nil, &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "Invalid ProductId",
+			Message: "Invalid ProductId",
 		}
 	}
 	cart.CartItems, err = repo.PreloadCartItems(cart)
 	if err != nil {
 		return nil, &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "could not load cart items",
+			Message: "could not load cart items",
 		}
 	}
 

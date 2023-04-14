@@ -70,16 +70,27 @@ type ShowCartStruct struct {
 	Amount          float64 `json:"amount"`
 }
 
+type SearchReqStruct struct {
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+	Price    string `json:"price"`
+	Category string `json:"category"`
+}
+type SearchRepoStruct struct {
+	Id       uint64 `json:"id"`
+	Name     string `json:"name"`
+	Price    float64 `json:"price"`
+	Category string `json:"category"`
+}
 
 type CustomError struct {
-    StatusCode int
-    Message    string
-    Err        error
+	Message string
+	Err     error
 }
 
 func (e *CustomError) Error() string {
-    if e.Err != nil {
-        return fmt.Sprintf("%s: %v", e.Message, e.Err)
-    }
-    return e.Message
+	if e.Err != nil {
+		return fmt.Sprintf("%s: %v", e.Message, e.Err)
+	}
+	return e.Message
 }

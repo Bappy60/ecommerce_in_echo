@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
@@ -28,8 +27,7 @@ func (userRepo *userRepo) SignUp(user *types.SignReqStruct) error {
 	err := userRepo.db.Where("name = ? AND email = ?", user.Name, user.Email).First(&models.User{}).Error
 	if err == nil {
 		return &types.CustomError{
-			StatusCode: http.StatusConflict,
-			Message:    "User already exists",
+			Message: "User already exists",
 		}
 	}
 	password := HashPassword(user.Password)
@@ -41,8 +39,7 @@ func (userRepo *userRepo) SignUp(user *types.SignReqStruct) error {
 	}
 	if err := userRepo.db.Create(&newUser).Error; err != nil {
 		return &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "SignUp failed",
+			Message: "SignUp failed",
 		}
 	}
 	return nil
@@ -52,30 +49,26 @@ func (repo *userRepo) Login(user *types.LoginReqStruct) (string, error) {
 	foundUser := models.User{}
 	if err := repo.db.Where("email = ?", user.Email).First(&foundUser).Error; err != nil {
 		return "", &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "email or password incorrect",
+			Message: "email or password incorrect",
 		}
 	}
 
 	IsValidPassword, msg := VerifyPassword(user.Password, foundUser.Password)
 	if !IsValidPassword {
 		return "", &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    msg,
+			Message: msg,
 		}
 	}
 	token, err := tokens.TokenGenerator(foundUser.Email, foundUser.ID, foundUser.HasRole)
 	if err != nil {
 		log.Println("Error Creating JWT token", err)
 		return "", &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "something went wrong",
+			Message: "something went wrong",
 		}
 	}
 	if err := repo.CreateCart(foundUser.ID); err != nil {
 		return "", &types.CustomError{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "could not create/found the cart",
+			Message: "could not create/found the cart",
 		}
 	}
 	return token, nil
