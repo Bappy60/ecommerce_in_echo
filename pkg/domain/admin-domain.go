@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
+	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
+	"github.com/labstack/echo/v4"
+)
 
 type IAdminController interface {
 	AddProduct(c echo.Context) error
@@ -11,12 +15,12 @@ type IAdminController interface {
 	//DeleteUser(c echo.Context)
 }
 
-// type IAdminService interface {
-//AddProduct(c echo.Context) error
-// DeleteProduct(c echo.Context) error
-// }
+type IAdminService interface {
+AddProduct(product types.CreateProductStruct) error
+DeleteProduct(id string) error
+}
 
-// type IAdminRepo interface {
-//AddProduct(c echo.Context) error
-// DeleteProduct(c echo.Context) error
-// }
+type IAdminRepo interface {
+AddProduct(product models.Product) error
+DeleteProduct(id uint64) error
+}

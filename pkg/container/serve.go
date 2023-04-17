@@ -29,16 +29,17 @@ func Serve() {
 	generalService := services.GeneralServiceInstance(generalRepo)
 	generalController := controllers.GeneralControllerInstance(generalService)
 
-	// adminRepo := repositories.AdminDBInstance(db)
-	// adminService := services.AdminServiceInstance(adminRepo)
-	// adminController := controllers.AdminControllerInstance(adminService)
+	adminRepo := repositories.AdminDBInstance(db)
+	adminService := services.AdminServiceInstance(adminRepo)
+	adminController := controllers.AdminControllerInstance(adminService)
 
 
 	 log.Println("Database Connected...")
 	 routes.UserRoutes(e, userController)
 	 routes.CartRoutes(e,cartController)
 	 routes.GeneralRoutes(e,generalController)
-	 // routes.AdminRoutes(e,adminController)
+	 routes.AdminRoutes(e,adminController)
+	 
 	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
 
 }
