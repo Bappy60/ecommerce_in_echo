@@ -1,8 +1,6 @@
 package services
 
 import (
-	"strconv"
-
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
 )
@@ -27,16 +25,10 @@ func (service *CartService) AddToCart(userid uint64, reqStruct *types.AddToCart)
 }
 
 // RemoveFromCart implements domain.ICartService
-func (service *CartService) RemoveFromCart(cartItemId string, userId uint64) error {
-	parsedcartItemId, err := strconv.ParseUint(cartItemId, 10, 64)
+func (service *CartService) RemoveFromCart(cartItemId uint64, userId uint64) error {
+	err := service.repo.RemoveFromCart(cartItemId, userId)
 	if err != nil {
-		return &types.CustomError{
-			Message: "Invalid Cart item Id",
-		}
-	}
-	err2 := service.repo.RemoveFromCart(parsedcartItemId, userId)
-	if err2 != nil {
-		return err2
+		return err
 	}
 	return nil
 }

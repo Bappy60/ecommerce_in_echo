@@ -19,16 +19,16 @@ func AdminControllerInstance(adminService domain.IAdminService) domain.IAdminCon
 }
 
 func (adminController *AdminController) AddProduct(c echo.Context) error {
-	reqproduct := types.CreateProduct{}
-	if err := c.Bind(&reqproduct); err != nil {
+	requestProduct := types.CreateProduct{}
+	if err := c.Bind(&requestProduct); err != nil {
 		return c.JSON(http.StatusBadRequest, "err while binding")
 	}
-	err := reqproduct.Validate()
+	err := requestProduct.Validate()
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, "err whlie validating")
 	}
 
-	if err := adminController.service.AddProduct(reqproduct); err != nil {
+	if err := adminController.service.AddProduct(requestProduct); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, "Product created Successfully")

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
@@ -45,8 +46,13 @@ func (cartController *CartController) ShowCart(c echo.Context) error {
 func (cartController *CartController) RemoveFromCart(c echo.Context) error {
 	cartItemId := c.Param("cartItemId")
 	userid := c.Get("userId").(uint64)
-	err := cartController.service.RemoveFromCart(cartItemId, userid)
+	parsedcartItemId, err := strconv.ParseUint(cartItemId, 10, 64)
 	if err != nil {
+		return &types.CustomError{
+			Message: "Invalid Cart item Id",
+		}
+	}
+	if err := cartController.service.RemoveFromCart(parsedcartItemId, userid); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cart item removed successfully"})

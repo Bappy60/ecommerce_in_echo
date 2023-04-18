@@ -14,7 +14,7 @@ type ICartController interface {
 
 type ICartService interface {
 	AddToCart(userid uint64, reqStruct *types.AddToCart) error
-	RemoveFromCart(cartItemId string,userId uint64)error
+	RemoveFromCart(parsedcartItemId uint64,userId uint64)error
 	ShowCart(userid uint64) ([]types.ShowCart,error)
 }
 type ICartRepo interface {
