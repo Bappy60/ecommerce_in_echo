@@ -8,14 +8,14 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
-type SignReqStruct struct {
+type SignInRequest struct {
 	Name     string         `json:"name"`
 	Password string         `json:"password"`
 	Email    string         `json:"email"`
 	Address  models.Address `json:"address"`
 }
 
-func (user SignReqStruct) Validate() error {
+func (user SignInRequest) Validate() error {
 	return validation.ValidateStruct(&user,
 		validation.Field(&user.Name, validation.Required, validation.Length(3, 50)),
 		validation.Field(&user.Password, validation.Required),
@@ -24,25 +24,25 @@ func (user SignReqStruct) Validate() error {
 	)
 }
 
-type LoginReqStruct struct {
+type LoginRequset struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 }
 
-func (user LoginReqStruct) Validate() error {
+func (user LoginRequset) Validate() error {
 	return validation.ValidateStruct(&user,
 		validation.Field(&user.Password, validation.Required, validation.Length(4, 20)),
 		validation.Field(&user.Email, validation.Required, is.Email),
 	)
 }
 
-type CreateProductStruct struct {
+type CreateProduct struct {
 	Name     string                 `json:"name"`
 	Price    float64                `json:"price"`
 	Category models.ProductCategory `json:"category"`
 }
 
-func (product CreateProductStruct) Validate() error {
+func (product CreateProduct) Validate() error {
 	return validation.ValidateStruct(&product,
 		validation.Field(&product.Name, validation.Required),
 		validation.Field(&product.Price, validation.Required),
@@ -50,19 +50,19 @@ func (product CreateProductStruct) Validate() error {
 	)
 }
 
-type AddToCartStruct struct {
+type AddToCart struct {
 	ProductID int    `json:"product_id"`
 	Quantity  uint64 `json:"quantity"`
 }
 
-func (atc AddToCartStruct) Validate() error {
+func (atc AddToCart) Validate() error {
 	return validation.ValidateStruct(&atc,
 		validation.Field(&atc.ProductID, validation.Required),
 		validation.Field(&atc.Quantity, validation.Required),
 	)
 }
 
-type ShowCartStruct struct {
+type ShowCart struct {
 	CartItemID      uint64  `json:"cart_item_id"`
 	ProductName     string  `json:"product_name"`
 	ProductCategory string  `json:"product_category"`
@@ -70,13 +70,13 @@ type ShowCartStruct struct {
 	Amount          float64 `json:"amount"`
 }
 
-type SearchReqStruct struct {
+type SearchRequest struct {
 	Id       string `json:"id"`
 	Name     string `json:"name"`
 	Price    string `json:"price"`
 	Category string `json:"category"`
 }
-type SearchRepoStruct struct {
+type SearchRepo struct {
 	Id       uint64 `json:"id"`
 	Name     string `json:"name"`
 	Price    float64 `json:"price"`

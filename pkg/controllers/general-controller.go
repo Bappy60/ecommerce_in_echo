@@ -49,7 +49,7 @@ func (generalController *GeneralController) SearchProduct(c echo.Context) error 
 		return c.JSON(http.StatusOK, products)
 	}
 
-	searchReq := &types.SearchReqStruct{
+	searchReq := &types.SearchRequest{
 		Id:       id,
 		Name:     name,
 		Price:    price,

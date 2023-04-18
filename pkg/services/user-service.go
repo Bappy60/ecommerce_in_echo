@@ -16,7 +16,7 @@ func UserServiceInstance(userRepo domain.IUserRepo) domain.IUserService {
 }
 
 // SignUp implements domain.IUserService
-func (service *userService) SignUp(reqUser *types.SignReqStruct) error {
+func (service *userService) SignUp(reqUser *types.SignInRequest) error {
 
 	err := service.repo.SignUp(reqUser)
 	if  err != nil {
@@ -26,7 +26,7 @@ func (service *userService) SignUp(reqUser *types.SignReqStruct) error {
 }
 
 // Login implements domain.IUserService
-func (service *userService) Login(reqUser *types.LoginReqStruct) (string, error) {
+func (service *userService) Login(reqUser *types.LoginRequset) (string, error) {
 
 	token, err := service.repo.Login(reqUser)
 	if err != nil {

@@ -18,7 +18,7 @@ func AdminServiceInstance(adminRepo domain.IAdminRepo) domain.IAdminService {
 }
 
 // AddProduct implements domain.IAdminService
-func (service *AdminService) AddProduct(reqproduct types.CreateProductStruct) error {
+func (service *AdminService) AddProduct(reqproduct types.CreateProduct) error {
 
 		product := models.Product{
 		Name:     reqproduct.Name,

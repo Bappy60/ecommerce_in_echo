@@ -11,10 +11,10 @@ type IUserController interface {
 }
 
 type IUserService interface {
-	SignUp(reqUser *types.SignReqStruct) error
-	Login(reqUser *types.LoginReqStruct) (string,error)
+	SignUp(reqUser *types.SignInRequest) error
+	Login(reqUser *types.LoginRequset) (string,error)
 }
 type IUserRepo interface {
-	SignUp(user *types.SignReqStruct) error
-	Login(user *types.LoginReqStruct) (string,error)
+	SignUp(user *types.SignInRequest) error
+	Login(user *types.LoginRequset) (string,error)
 }

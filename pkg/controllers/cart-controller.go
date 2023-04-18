@@ -19,7 +19,7 @@ func CartControllerInstance(CartService domain.ICartService) domain.ICartControl
 }
 
 func (cartController *CartController) AddToCart(c echo.Context) error {
-	reqStruct := types.AddToCartStruct{}
+	reqStruct := types.AddToCart{}
 	if err := c.Bind(&reqStruct); err != nil {
 		return err
 	}

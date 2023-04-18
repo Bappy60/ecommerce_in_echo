@@ -22,7 +22,7 @@ func UserDBInstance(d *gorm.DB) domain.IUserRepo {
 	}
 }
 
-func (userRepo *userRepo) SignUp(user *types.SignReqStruct) error {
+func (userRepo *userRepo) SignUp(user *types.SignInRequest) error {
 
 	err := userRepo.db.Where("name = ? AND email = ?", user.Name, user.Email).First(&models.User{}).Error
 	if err == nil {
@@ -45,7 +45,7 @@ func (userRepo *userRepo) SignUp(user *types.SignReqStruct) error {
 	return nil
 }
 
-func (repo *userRepo) Login(user *types.LoginReqStruct) (string, error) {
+func (repo *userRepo) Login(user *types.LoginRequset) (string, error) {
 	foundUser := models.User{}
 	if err := repo.db.Where("email = ?", user.Email).First(&foundUser).Error; err != nil {
 		return "", &types.CustomError{

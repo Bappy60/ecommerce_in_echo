@@ -21,7 +21,7 @@ func UserControllerInstance(userService domain.IUserService) domain.IUserControl
 
 // SignUp implements domain.IUserController
 func (userController *UserController) SignUp(c echo.Context) error {
-	user := types.SignReqStruct{}
+	user := types.SignInRequest{}
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -37,7 +37,7 @@ func (userController *UserController) SignUp(c echo.Context) error {
 
 // Login implements domain.IUserController
 func (userController *UserController) Login(c echo.Context) error {
-	user := types.LoginReqStruct{}
+	user := types.LoginRequset{}
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}

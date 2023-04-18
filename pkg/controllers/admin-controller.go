@@ -19,7 +19,7 @@ func AdminControllerInstance(adminService domain.IAdminService) domain.IAdminCon
 }
 
 func (adminController *AdminController) AddProduct(c echo.Context) error {
-	reqproduct := types.CreateProductStruct{}
+	reqproduct := types.CreateProduct{}
 	if err := c.Bind(&reqproduct); err != nil {
 		return c.JSON(http.StatusBadRequest, "err while binding")
 	}

@@ -19,7 +19,7 @@ func CartDBInstance(d *gorm.DB) domain.ICartRepo {
 }
 
 // AddToCart implements domain.ICartRepo
-func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCartStruct) error {
+func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCart) error {
 
 	cart, err := repo.getCartByUserID(userid)
 	if err != nil {
@@ -93,7 +93,7 @@ func (repo *CartRepo) RemoveFromCart(cartItemId uint64, userid uint64) error {
 }
 
 // ShowCart implements domain.ICartRepo
-func (repo *CartRepo) ShowCart(userId uint64) ([]types.ShowCartStruct, error) {
+func (repo *CartRepo) ShowCart(userId uint64) ([]types.ShowCart, error) {
 	cart, err := repo.getCartByUserID(userId)
 	if err != nil {
 		return nil, &types.CustomError{
@@ -107,9 +107,9 @@ func (repo *CartRepo) ShowCart(userId uint64) ([]types.ShowCartStruct, error) {
 		}
 	}
 
-	var items []types.ShowCartStruct
+	var items []types.ShowCart
 	for _, item := range cart.CartItems {
-		items = append(items, types.ShowCartStruct{
+		items = append(items, types.ShowCart{
 			CartItemID:      item.ID,
 			ProductName:     item.Product.Name,
 			ProductCategory: item.Product.Category.CategoryName,

@@ -11,8 +11,8 @@ type IGeneralController interface {
 }
 
 type IGeneralService interface {
-	SearchProduct(searchReq *types.SearchReqStruct) ([]models.Product,error)
+	SearchProduct(searchReq *types.SearchRequest) ([]models.Product,error)
 }
 type IGeneralRepo interface {
-	SearchProduct(searchRepo *types.SearchRepoStruct) ([]models.Product,error)
+	SearchProduct(searchRepo *types.SearchRepo) ([]models.Product,error)
 }

@@ -13,12 +13,12 @@ type ICartController interface {
 }
 
 type ICartService interface {
-	AddToCart(userid uint64, reqStruct *types.AddToCartStruct) error
+	AddToCart(userid uint64, reqStruct *types.AddToCart) error
 	RemoveFromCart(cartItemId string,userId uint64)error
-	ShowCart(userid uint64) ([]types.ShowCartStruct,error)
+	ShowCart(userid uint64) ([]types.ShowCart,error)
 }
 type ICartRepo interface {
-	AddToCart(userid uint64, reqStruct *types.AddToCartStruct) error
+	AddToCart(userid uint64, reqStruct *types.AddToCart) error
 	RemoveFromCart(cartItemId uint64, userId uint64)error
-	ShowCart(userid uint64)([]types.ShowCartStruct,error)
+	ShowCart(userid uint64)([]types.ShowCart,error)
 }

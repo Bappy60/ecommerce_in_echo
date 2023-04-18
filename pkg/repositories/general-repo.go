@@ -18,7 +18,7 @@ func GeneralDBInstance(d *gorm.DB) domain.IGeneralRepo {
 }
 
 // SearchProduct implements domain.IGeneralRepo
-func (repo *GeneralRepo) SearchProduct(searchRepo *types.SearchRepoStruct) ([]models.Product, error) {
+func (repo *GeneralRepo) SearchProduct(searchRepo *types.SearchRepo) ([]models.Product, error) {
 	products := []models.Product{}
 	query := repo.db.Model(&models.Product{}).Preload("Category")
 

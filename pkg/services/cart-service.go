@@ -18,7 +18,7 @@ func CartServiceInstance(cartRepo domain.ICartRepo) domain.ICartService {
 }
 
 // AddToCart implements domain.ICartService
-func (service *CartService) AddToCart(userid uint64, reqStruct *types.AddToCartStruct) error {
+func (service *CartService) AddToCart(userid uint64, reqStruct *types.AddToCart) error {
 	err := service.repo.AddToCart(userid, reqStruct)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (service *CartService) RemoveFromCart(cartItemId string, userId uint64) err
 }
 
 // ShowCart implements domain.ICartService
-func (service *CartService) ShowCart(userid uint64) ([]types.ShowCartStruct, error) {
+func (service *CartService) ShowCart(userid uint64) ([]types.ShowCart, error) {
 	items, err := service.repo.ShowCart(userid)
 	if err != nil {
 		return nil, err

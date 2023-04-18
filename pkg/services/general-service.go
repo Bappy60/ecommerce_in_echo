@@ -19,7 +19,7 @@ func GeneralServiceInstance(generalRepo domain.IGeneralRepo) domain.IGeneralServ
 }
 
 // SearchProduct implements domain.IGeneralService
-func (generalService *GeneralService) SearchProduct(searchReq *types.SearchReqStruct) ([]models.Product, error) {
+func (generalService *GeneralService) SearchProduct(searchReq *types.SearchRequest) ([]models.Product, error) {
 	parsedId, err := strconv.ParseUint(searchReq.Id, 10, 64)
 	if err != nil && searchReq.Id != "" {
 		return nil, &types.CustomError{
@@ -37,7 +37,7 @@ func (generalService *GeneralService) SearchProduct(searchReq *types.SearchReqSt
 		}
 	}
 
-	searchRepoStruct := &types.SearchRepoStruct{
+	searchRepoStruct := &types.SearchRepo{
 		Id:       parsedId,
 		Name:     searchReq.Name,
 		Price:    parsedPrice,
