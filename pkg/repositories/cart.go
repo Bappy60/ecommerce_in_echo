@@ -1,7 +1,7 @@
 package repositories
 
 import (
-
+	"github.com/Bappy60/ecommerce_in_echo/pkg/consts"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
@@ -35,7 +35,7 @@ func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCart) error
 		cartItem.TotalItemPrice = float64(cartItem.Product.Price) * float64(cartItem.Quantity)
 		if err := repo.db.Save(&cartItem).Error; err != nil {
 			return &types.CustomError{
-				Message: "could not update cart item",
+				Message: consts.CartUpdateFailed,
 				Err: err,
 			}
 		}
@@ -51,15 +51,14 @@ func (repo *CartRepo) AddToCart(userid uint64, reqStruct *types.AddToCart) error
 			}
 			if err := repo.db.Create(&newCartItem).Error; err != nil {
 				return &types.CustomError{
-					Message: "could not add product to cart",
+					Message: consts.FailedToAddItem,
 					Err: err,
 				}
 			}
 			return nil
 		}
-		// TODO:  statuscode conflict
 		return &types.CustomError{
-			Message: "Invalid ProductId",
+			Message: consts.InvalidID,
 			Err: err,
 		}
 	}
@@ -70,7 +69,7 @@ func (repo *CartRepo) RemoveFromCart(cartItemId uint64, userid uint64) error {
 	cartItem := models.CartItem{}
 	if err := repo.db.First(&cartItem, cartItemId).Error; err != nil {
 		return &types.CustomError{
-			Message: "Cart item not found",
+			Message: consts.CartItemNotFound,
 		}
 	}
 	cart, err := repo.getCartByUserID(userid)
@@ -81,12 +80,12 @@ func (repo *CartRepo) RemoveFromCart(cartItemId uint64, userid uint64) error {
 	}
 	if cartItem.CartID != cart.ID {
 		return &types.CustomError{
-			Message: "Cart item does not belong to the logged in user",
+			Message: consts.InvalidCartID,
 		}
 	}
 	if err := repo.db.Delete(&cartItem).Error; err != nil {
 		return &types.CustomError{
-			Message: "Could not remove cart item",
+			Message: consts.RemoveUnsuccessful,
 		}
 	}
 	return nil
@@ -97,13 +96,13 @@ func (repo *CartRepo) ShowCart(userId uint64) ([]types.ShowCart, error) {
 	cart, err := repo.getCartByUserID(userId)
 	if err != nil {
 		return nil, &types.CustomError{
-			Message: "Invalid ProductId",
+			Message: consts.InvalidID,
 		}
 	}
 	cart.CartItems, err = repo.PreloadCartItems(cart)
 	if err != nil {
 		return nil, &types.CustomError{
-			Message: "could not load cart items",
+			Message: consts.PreloadErr,
 		}
 	}
 

@@ -17,7 +17,7 @@ type IAdminController interface {
 
 type IAdminService interface {
 AddProduct(product types.CreateProduct) error
-DeleteProduct(id string) error
+DeleteProduct(id uint64) error
 }
 
 type IAdminRepo interface {

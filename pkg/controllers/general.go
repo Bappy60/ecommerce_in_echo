@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Bappy60/ecommerce_in_echo/pkg/consts"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
 	"github.com/labstack/echo/v4"
@@ -27,11 +28,11 @@ func (generalController *GeneralController) SearchProduct(c echo.Context) error 
 
 	parsedId, err := strconv.ParseUint(id, 10, 64)
 	if err != nil && id != "" {
-		return c.JSON(http.StatusBadRequest, "Invalid format of id")
+		return c.JSON(http.StatusBadRequest, consts.ParseErr)
 	}
 	parsedPrice, err := strconv.ParseFloat(price, 64)
 	if err != nil && price != "" {
-		return c.JSON(http.StatusBadRequest, "Invalid format of price")
+		return c.JSON(http.StatusBadRequest, consts.ParseErr)
 	}
 	searchReq := &types.SearchRequest{
 		Id:       parsedId,

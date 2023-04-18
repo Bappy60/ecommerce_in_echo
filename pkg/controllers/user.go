@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/Bappy60/ecommerce_in_echo/pkg/consts"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
 
@@ -32,7 +33,7 @@ func (userController *UserController) SignUp(c echo.Context) error {
 	if err := userController.service.SignUp(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	return c.JSON(http.StatusCreated, "Successfully Signed Up!!")
+	return c.JSON(http.StatusCreated, consts.SignUpSuccessful)
 }
 
 // Login implements domain.IUserController

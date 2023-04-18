@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/Bappy60/ecommerce_in_echo/pkg/consts"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/tokens"
@@ -27,7 +28,7 @@ func (userRepo *userRepo) SignUp(user *types.SignInRequest) error {
 	err := userRepo.db.Where("name = ? AND email = ?", user.Name, user.Email).First(&models.User{}).Error
 	if err == nil {
 		return &types.CustomError{
-			Message: "User already exists",
+			Message: consts.DuplicateUser,
 		}
 	}
 	password := HashPassword(user.Password)
@@ -39,7 +40,7 @@ func (userRepo *userRepo) SignUp(user *types.SignInRequest) error {
 	}
 	if err := userRepo.db.Create(&newUser).Error; err != nil {
 		return &types.CustomError{
-			Message: "SignUp failed",
+			Message: consts.SignUpUnSuccessful,
 		}
 	}
 	return nil
@@ -49,7 +50,7 @@ func (repo *userRepo) Login(user *types.LoginRequset) (string, error) {
 	foundUser := models.User{}
 	if err := repo.db.Where("email = ?", user.Email).First(&foundUser).Error; err != nil {
 		return "", &types.CustomError{
-			Message: "email or password incorrect",
+			Message: consts.IncorerctDetails,
 		}
 	}
 
@@ -61,14 +62,13 @@ func (repo *userRepo) Login(user *types.LoginRequset) (string, error) {
 	}
 	token, err := tokens.TokenGenerator(foundUser.Email, foundUser.ID, foundUser.HasRole)
 	if err != nil {
-		log.Println("Error Creating JWT token", err)
 		return "", &types.CustomError{
-			Message: "something went wrong",
+			Message: consts.TokenGenErr,
 		}
 	}
 	if err := repo.CreateCart(foundUser.ID); err != nil {
 		return "", &types.CustomError{
-			Message: "could not create/found the cart",
+			Message: consts.CartCreationErr,
 		}
 	}
 	return token, nil
@@ -86,7 +86,7 @@ func VerifyPassword(userpassword string, givenpassword string) (bool, string) {
 	valid := true
 	msg := ""
 	if err != nil {
-		msg = "email Or Passowrd is Incorerct"
+		msg = consts.IncorerctDetails
 		valid = false
 	}
 	return valid, msg
