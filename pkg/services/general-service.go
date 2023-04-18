@@ -27,6 +27,8 @@ func (generalService *GeneralService) SearchProduct(searchReq *types.SearchReqSt
 			Err:     err,
 		}
 	}
+
+
 	parsedPrice, err := strconv.ParseFloat(searchReq.Price, 64)
 	if err != nil && searchReq.Price != "" {
 		return nil, &types.CustomError{

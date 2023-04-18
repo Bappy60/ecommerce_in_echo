@@ -16,6 +16,7 @@ func Serve() {
 	e := echo.New()
 	config.SetConfig()
 	var db = connection.Initialize()
+	redisClient:= connection.Redis()
 	
 	userRepo := repositories.UserDBInstance(db)
 	userService := services.UserServiceInstance(userRepo)
@@ -27,7 +28,7 @@ func Serve() {
 
 	generalRepo := repositories.GeneralDBInstance(db)
 	generalService := services.GeneralServiceInstance(generalRepo)
-	generalController := controllers.GeneralControllerInstance(generalService)
+	generalController := controllers.GeneralControllerInstance(generalService,redisClient)
 
 	adminRepo := repositories.AdminDBInstance(db)
 	adminService := services.AdminServiceInstance(adminRepo)
