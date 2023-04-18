@@ -71,16 +71,16 @@ type ShowCart struct {
 }
 
 type SearchRequest struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Price    string `json:"price"`
-	Category string `json:"category"`
+	Id       uint64  `json:"id"`
+	Name     string  `json:"name"`
+	Price    float64 `json:"price"`
+	Category string  `json:"category"`
 }
 type SearchRepo struct {
-	Id       uint64 `json:"id"`
-	Name     string `json:"name"`
+	Id       uint64  `json:"id"`
+	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
-	Category string `json:"category"`
+	Category string  `json:"category"`
 }
 
 type CustomError struct {

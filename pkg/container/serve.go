@@ -27,8 +27,8 @@ func Serve() {
 	cartController := controllers.CartControllerInstance(cartService)
 
 	generalRepo := repositories.GeneralDBInstance(db)
-	generalService := services.GeneralServiceInstance(generalRepo)
-	generalController := controllers.GeneralControllerInstance(generalService,redisClient)
+	generalService := services.GeneralServiceInstance(generalRepo,redisClient)
+	generalController := controllers.GeneralControllerInstance(generalService)
 
 	adminRepo := repositories.AdminDBInstance(db)
 	adminService := services.AdminServiceInstance(adminRepo)

@@ -1,32 +1,23 @@
 package controllers
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
+	"strconv"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
-	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
 	"github.com/labstack/echo/v4"
-	"github.com/redis/go-redis/v9"
 )
 
 type GeneralController struct {
-	service     domain.IGeneralService
-	redisClient *redis.Client
+	service domain.IGeneralService
 }
 
-func GeneralControllerInstance(generalService domain.IGeneralService, redisClient *redis.Client) domain.IGeneralController {
+func GeneralControllerInstance(generalService domain.IGeneralService) domain.IGeneralController {
 	return &GeneralController{
-		service:     generalService,
-		redisClient: redisClient,
+		service: generalService,
 	}
 }
-
-var ctx = context.Background()
 
 func (generalController *GeneralController) SearchProduct(c echo.Context) error {
 	id := c.QueryParam("id")
@@ -34,44 +25,22 @@ func (generalController *GeneralController) SearchProduct(c echo.Context) error 
 	price := c.QueryParam("price")
 	categoryName := c.QueryParam("category_name")
 
-	cacheKey := fmt.Sprintf("%s:%s:%s:%s", id, name, price, categoryName)
-
-	cachedData, err := generalController.redisClient.Get(ctx, cacheKey).Result()
-	if err == nil {
-		var products []models.Product
-		err := json.Unmarshal([]byte(cachedData), &products)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, &types.CustomError{
-				Message: err.Error(),
-				Err:     err,
-			})
-		}
-		return c.JSON(http.StatusOK, products)
+	parsedId, err := strconv.ParseUint(id, 10, 64)
+	if err != nil && id != "" {
+		return c.JSON(http.StatusBadRequest, "Invalid format of id")
 	}
-
+	parsedPrice, err := strconv.ParseFloat(price, 64)
+	if err != nil && price != "" {
+		return c.JSON(http.StatusBadRequest, "Invalid format of price")
+	}
 	searchReq := &types.SearchRequest{
-		Id:       id,
+		Id:       parsedId,
 		Name:     name,
-		Price:    price,
+		Price:    parsedPrice,
 		Category: categoryName,
 	}
-
 	products, err := generalController.service.SearchProduct(searchReq)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, &types.CustomError{
-			Message: err.Error(),
-			Err:     err,
-		})
-	}
-	jsonData, err := json.Marshal(products)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, &types.CustomError{
-			Message: err.Error(),
-			Err:     err,
-		})
-	}
-	_, err2 := generalController.redisClient.Set(ctx, cacheKey, jsonData,time.Hour).Result()
-	if err2 != nil {
 		return c.JSON(http.StatusInternalServerError, &types.CustomError{
 			Message: err.Error(),
 			Err:     err,

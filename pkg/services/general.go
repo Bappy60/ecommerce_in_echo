@@ -1,55 +1,68 @@
 package services
 
 import (
-	"strconv"
+	"context"
+	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/Bappy60/ecommerce_in_echo/pkg/domain"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/models"
 	"github.com/Bappy60/ecommerce_in_echo/pkg/types"
+	"github.com/redis/go-redis/v9"
 )
 
 type GeneralService struct {
-	repo domain.IGeneralRepo
+	repo        domain.IGeneralRepo
+	redisClient *redis.Client
 }
 
-func GeneralServiceInstance(generalRepo domain.IGeneralRepo) domain.IGeneralService {
+func GeneralServiceInstance(generalRepo domain.IGeneralRepo, redisClient *redis.Client) domain.IGeneralService {
 	return &GeneralService{
-		repo: generalRepo,
+		repo:        generalRepo,
+		redisClient: redisClient,
 	}
 }
+
+var ctx = context.Background()
 
 // SearchProduct implements domain.IGeneralService
 func (generalService *GeneralService) SearchProduct(searchReq *types.SearchRequest) ([]models.Product, error) {
-	parsedId, err := strconv.ParseUint(searchReq.Id, 10, 64)
-	if err != nil && searchReq.Id != "" {
+
+	cacheKey := fmt.Sprintf("%d:%s:%f:%s", searchReq.Id, searchReq.Name, searchReq.Price, searchReq.Category)
+	cachedData, err := generalService.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var products []models.Product
+		err := json.Unmarshal([]byte(cachedData), &products)
+		if err != nil {
+			return nil, &types.CustomError{
+				Message: err.Error(),
+				Err:     err,
+			}
+		}
+		return products, nil
+	}
+
+	products, err := generalService.repo.SearchProduct(searchReq)
+	if err != nil {
 		return nil, &types.CustomError{
-			Message: "Invalid format of id",
+			Message: err.Error(),
 			Err:     err,
 		}
 	}
-
-
-	parsedPrice, err := strconv.ParseFloat(searchReq.Price, 64)
-	if err != nil && searchReq.Price != "" {
+	jsonData, err := json.Marshal(products)
+	if err != nil {
 		return nil, &types.CustomError{
-			Message: "Invalid format of price",
+			Message: err.Error(),
 			Err:     err,
 		}
 	}
-
-	searchRepoStruct := &types.SearchRepo{
-		Id:       parsedId,
-		Name:     searchReq.Name,
-		Price:    parsedPrice,
-		Category: searchReq.Category,
-	}
-	Products, err2 := generalService.repo.SearchProduct(searchRepoStruct)
-	if err2 != nil {
+	if _, err := generalService.redisClient.Set(ctx, cacheKey, jsonData, time.Hour).Result(); err != nil {
 		return nil, &types.CustomError{
-			Message: "",
-			Err:     err2,
+			Message: err.Error(),
+			Err:     err,
 		}
 	}
-	return Products, nil
+	return products, nil
 
 }
