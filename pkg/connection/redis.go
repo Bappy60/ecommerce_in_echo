@@ -4,16 +4,17 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Bappy60/ecommerce_in_echo/pkg/config"
 	"github.com/redis/go-redis/v9"
 )
 
 var Client *redis.Client
 
-func RedisConnection()  {
+func RedisConnection() {
 
 	Client = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
+		Addr:     config.LocalConfig.REDIS_HOST + ":" + config.LocalConfig.REDIS_PORT,
+		Password: config.LocalConfig.REDIS_PASS,
 		DB:       0,
 	})
 	red, err := Client.Ping(context.Background()).Result()
@@ -26,6 +27,8 @@ func RedisConnection()  {
 }
 
 func Redis() *redis.Client {
-	RedisConnection()
+	if Client == nil {
+		RedisConnection()
+	}
 	return Client
 }
