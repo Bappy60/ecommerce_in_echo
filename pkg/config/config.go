@@ -24,18 +24,18 @@ func InitConfig() *Config {
 
 	viper.AddConfigPath("D:/goProjects/ecommerce_in_echo")
 
-	viper.SetConfigName("app")
+	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file", err)
+		log.Fatal("Error reading env file x", err)
 	}
 
 	var config *Config
 
 	if err := viper.Unmarshal(&config); err != nil {
-		log.Fatal("Error reading env file", err)
+		log.Fatal("Error reading env file while unmarshaling", err)
 	}
 
 	return config
