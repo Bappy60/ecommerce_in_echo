@@ -36,6 +36,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /app/bin/ecommerce_api .
+RUN go build -o /ecommerce_api .
 EXPOSE 9011
-CMD ["/app/bin/ecommerce_api"]
+CMD ["/ecommerce_api"]

@@ -22,7 +22,7 @@ type Config struct {
 
 func InitConfig() *Config {
 
-	viper.AddConfigPath("D:/goProjects/ecommerce_in_echo/")
+	viper.AddConfigPath(".")
 
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
