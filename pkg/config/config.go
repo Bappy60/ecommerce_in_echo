@@ -11,8 +11,9 @@ var LocalConfig *Config
 type Config struct {
 	DBUser     string `mapstructure:"DBUSER"`
 	DBPass     string `mapstructure:"DBPASS"`
-	DBIP       string `mapstructure:"DBIP"`
-	DbName     string `mapstructure:"DBNAME"`
+	DBHost     string `mapstructure:"DBHOST"`
+	DBName     string `mapstructure:"DBNAME"`
+	DBPort     int `mapstructure:"DBPORT"`
 	PORT       string `mapstructure:"PORT"`
 	SECRET_KEY string `mapstructure:"SECRET_KEY"`
 	REDIS_HOST string `mapstructure:"REDIS_HOST"`
