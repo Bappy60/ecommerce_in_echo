@@ -1,22 +1,24 @@
-version: "3.8"
 services:
   ecommerce_api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: ecommerce_api
     restart: always
     ports:
       - "9011:9011"
     env_file:
-      - .env
+      - app.env
     depends_on:
       - mysql
       - redis
+    links:
+      - mysql
+
   mysql:
     image: mysql:8.0.32
     container_name: mysql
     restart: always
+    env_file:
+      - app.env
     environment:
       MYSQL_ROOT_PASSWORD: bappy60
       MYSQL_DATABASE: ecommerce_db
@@ -24,12 +26,12 @@ services:
       - "3307:3307"
     volumes:
       - db_data:/var/lib/mysql
-    env_file:
-      - .env
   redis:
     image: redis:7.0.10
     container_name: redis
     restart: always
+    env_file:
+      - app.env
     ports:
       - "6379:6379"
 volumes:

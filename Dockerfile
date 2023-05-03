@@ -4,13 +4,15 @@ ENV GO111MODULE=on
 
 RUN apk add git
 RUN mkdir /app
-ADD . /app
 WORKDIR /app
+ADD . .
 
-COPY go.mod ./
-COPY go.sum ./
+
+COPY go.mod .
+COPY go.sum .
 RUN go mod download
 COPY . .
+COPY app.env .
 RUN go build -o /app/bin/ecommerce_api
 
 # Final stage

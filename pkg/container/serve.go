@@ -41,6 +41,6 @@ func Serve() {
 	 routes.GeneralRoutes(e,generalController)
 	 routes.AdminRoutes(e,adminController)
 	 
-	e.Logger.Fatal(e.Start(":" + config.LocalConfig.Port))
+	e.Logger.Fatal(e.Start(":" + config.LocalConfig.PORT))
 
 }

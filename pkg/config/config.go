@@ -13,7 +13,7 @@ type Config struct {
 	DBPass     string `mapstructure:"DBPASS"`
 	DBIP       string `mapstructure:"DBIP"`
 	DbName     string `mapstructure:"DBNAME"`
-	Port       string `mapstructure:"PORT"`
+	PORT       string `mapstructure:"PORT"`
 	SECRET_KEY string `mapstructure:"SECRET_KEY"`
 	REDIS_HOST string `mapstructure:"REDIS_HOST"`
 	REDIS_PORT string `mapstructure:"REDIS_PORT"`
@@ -22,14 +22,14 @@ type Config struct {
 
 func InitConfig() *Config {
 
-	viper.AddConfigPath("D:/goProjects/ecommerce_in_echo")
+	viper.AddConfigPath("D:/goProjects/ecommerce_in_echo/")
 
-	viper.SetConfigName(".env")
+	viper.SetConfigName("app")
 	viper.SetConfigType("env")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file x", err)
+		log.Fatal("Error reading env file x ", err)
 	}
 
 	var config *Config
