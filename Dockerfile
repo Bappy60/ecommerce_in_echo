@@ -24,9 +24,9 @@
 FROM golang:1.20.3-alpine
 ENV GO111MODULE=on
 
-RUN mkdir /app/D:/goProjects/ecommerce_in_echo
-WORKDIR /app/D:/goProjects/ecommerce_in_echo
-ADD . /app/D:/goProjects/ecommerce_in_echo
+RUN mkdir /app
+WORKDIR /app
+ADD . /app
 RUN apk add git
 
 # Download necessary Go modules
