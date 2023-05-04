@@ -13,20 +13,22 @@ type Config struct {
 	DBPass     string `mapstructure:"DBPASS"`
 	DBHost     string `mapstructure:"DBHOST"`
 	DBName     string `mapstructure:"DBNAME"`
-	DBPort     int `mapstructure:"DBPORT"`
+	DBPort     int    `mapstructure:"DBPORT"`
 	PORT       string `mapstructure:"PORT"`
 	SECRET_KEY string `mapstructure:"SECRET_KEY"`
 	REDIS_HOST string `mapstructure:"REDIS_HOST"`
 	REDIS_PORT string `mapstructure:"REDIS_PORT"`
 	REDIS_PASS string `mapstructure:"REDIS_PASS"`
+	APP_MODE   string `mapstructure:"APP_MODE"`
+	DBURL      string `mapstructure:"DBURL"`
 }
 
 func InitConfig() *Config {
 
-	viper.AddConfigPath(".")
+	// viper.AddConfigPath(".")
 
-	viper.SetConfigName("app")
-	viper.SetConfigType("env")
+	viper.SetConfigFile("app.env")
+	// viper.SetConfigType("env")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
