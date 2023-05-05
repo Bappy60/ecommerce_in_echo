@@ -2,7 +2,6 @@ services:
   ecommerce_api:
     build: .
     container_name: ecommerce_api
-    restart: always
     ports:
       - "9011:9011"
     env_file:

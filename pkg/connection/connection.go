@@ -41,8 +41,8 @@ func Initialize() *gorm.DB {
 		&models.Product{},
 		&models.Address{},
 		&models.Cart{},
-		&models.Order{},
-		&models.OrderItem{},
+		// &models.Order{},
+		// &models.OrderItem{},
 		&models.CartItem{},
 	)
 	return db
