@@ -19,16 +19,17 @@ type Config struct {
 	REDIS_HOST string `mapstructure:"REDIS_HOST"`
 	REDIS_PORT string `mapstructure:"REDIS_PORT"`
 	REDIS_PASS string `mapstructure:"REDIS_PASS"`
-	APP_MODE   string `mapstructure:"APP_MODE"`
-	DBURL      string `mapstructure:"DBURL"`
 }
 
 func InitConfig() *Config {
 
-	// viper.AddConfigPath(".")
-
-	viper.SetConfigFile("app.env")
-	// viper.SetConfigType("env")
+	env := "prod" //os.Getenv("APP_ENV")
+	viper.AddConfigPath(".")
+	if env == "prod" {
+		viper.SetConfigFile("prod.env")
+	} else {
+		viper.SetConfigFile("dev.env")
+	}
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

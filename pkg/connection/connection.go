@@ -13,14 +13,10 @@ var DB *gorm.DB
 
 func Connect() {
 	config := config.LocalConfig
-	var connectionString string
-	if config.APP_MODE == "prod" {
-		connectionString = fmt.Sprintf("%s?charset=utf8mb4&parseTime=True&loc=Local",
-			config.DBURL)
-	} else {
-		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-			config.DBUser, config.DBPass, config.DBHost, config.DBPort, config.DBName)
-	}
+
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		config.DBUser, config.DBPass, config.DBHost, config.DBPort, config.DBName)
+		
 	d, err := gorm.Open("mysql", connectionString)
 	if err != nil {
 		panic(err.Error())
